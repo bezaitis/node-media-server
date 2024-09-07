@@ -2,21 +2,22 @@ const NodeMediaServer = require('node-media-server');
 
 const config = {
   rtmp: {
-    port: 8080,
+    port: 80,
     chunk_size: 60000,
     gop_cache: true,
     ping: 30,
-    ping_timeout: 60
+    ping_timeout: 60,
+    ffmpeg: '/usr/bin/ffmpeg'  // Ensure this path is correct
   },
   http: {
-    port: 8081,
+    port: 8000,
     allow_origin: '*',
-    mediaroot: './media',  // Ensure this directory exists
-    webroot: './www',      // Ensure this directory exists
+    mediaroot: './media',  // Ensure this directory exists or is created
+    webroot: './www',      // Ensure this directory exists or is created
     api: true
   },
   trans: {
-    ffmpeg: '/opt/homebrew/bin/ffmpeg',  // Ensure FFmpeg is installed and the path is correct
+    ffmpeg: '/usr/bin/ffmpeg',  // Update this path to the correct location
     tasks: [
       {
         app: 'live',
@@ -33,8 +34,6 @@ const config = {
 };
 
 var nms = new NodeMediaServer(config);
-nms.run();
-
 nms.run();
 
 console.log("RTMP server is running on port 80");
