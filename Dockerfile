@@ -17,7 +17,7 @@ RUN npm install
 COPY . .
 
 # Expose the port used by RTMP and HTTP
-EXPOSE 80
+EXPOSE 1935 8000
 
 # Command to start the Node Media Server
 CMD ["npm", "start"]

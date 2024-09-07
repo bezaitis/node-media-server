@@ -2,7 +2,7 @@ const NodeMediaServer = require('node-media-server');
 
 const config = {
   rtmp: {
-    port: 80,  // RTMP uses port 80
+    port: 1935,  // RTMP uses port 80
     chunk_size: 60000,
     gop_cache: true,
     ping: 30,
@@ -10,7 +10,7 @@ const config = {
     ffmpeg: '/usr/bin/ffmpeg'  // Ensure this path is correct
   },
   http: {
-    port: 80,  // HTTP uses port 80
+    port: 8000,  // HTTP uses port 80
     allow_origin: '*',
     mediaroot: './media',
     webroot: './www',
