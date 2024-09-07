@@ -20,7 +20,7 @@ COPY . .
 RUN mkdir -p /app/media /app/www
 
 # Expose the RTMP port and HTTP port
-EXPOSE 80 8000
+EXPOSE 80
 
 # Command to start the Node Media Server
 CMD ["npm", "start"]
