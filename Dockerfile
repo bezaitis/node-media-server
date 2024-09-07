@@ -1,9 +1,8 @@
 # Use an official Node.js runtime as a parent image
-FROM node:18
+FROM node:18-alpine
 
 # Install FFmpeg
-RUN apt-get update && \
-    apt-get install -y ffmpeg
+RUN apk add --no-cache ffmpeg
 
 # Set the working directory inside the container
 WORKDIR /app
@@ -17,7 +16,7 @@ RUN npm install
 # Copy the rest of the application code
 COPY . .
 
-# Expose the RTMP port
+# Expose the port used by RTMP and HTTP
 EXPOSE 80
 
 # Command to start the Node Media Server

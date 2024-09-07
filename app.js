@@ -2,19 +2,19 @@ const NodeMediaServer = require('node-media-server');
 
 const config = {
   rtmp: {
-    port: 80,
+    port: 80,  // RTMP uses port 80
     chunk_size: 60000,
     gop_cache: true,
     ping: 30,
     ping_timeout: 60,
-    ffmpeg: '/usr/bin/ffmpeg'  // Update this path if necessary
+    ffmpeg: '/usr/bin/ffmpeg'  // Ensure this path is correct
   },
   http: {
-    port: 80,  // Same port as RTMP
+    port: 80,  // HTTP uses port 80
     allow_origin: '*',
     mediaroot: './media',
     webroot: './www',
-    api: false  // Disable HTTP API if not needed
+    api: true
   },
   trans: {
     ffmpeg: '/usr/bin/ffmpeg',
@@ -32,10 +32,10 @@ const config = {
     ]
   },
   auth: {
-    api: false,  // Disable API authentication if not needed
+    api: true,
     play: false,
     publish: true,
-    secret: 'bezaitis_experiment'  // Stream key
+    secret: 'bezaitis_experiment'  // Ensure this matches your stream key in OBS
   }
 };
 
@@ -45,7 +45,8 @@ nms.on('prePublish', (id, StreamPath, args) => {
   let streamKey = getStreamKeyFromStreamPath(StreamPath);
   console.log('[NodeEvent on prePublish]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
 
-  if (streamKey !== 'bezaitis_experiment') {
+  // Validate stream key
+  if (streamKey !== 'bezaitis_experiment') {  // Ensure this matches your configured stream key
     console.log('[NodeEvent on prePublish] Stream key is invalid');
     nms.getSession(id).reject();
   }
@@ -57,6 +58,4 @@ const getStreamKeyFromStreamPath = (path) => {
 };
 
 nms.run();
-
-console.log("RTMP server is running on port 80");
 
