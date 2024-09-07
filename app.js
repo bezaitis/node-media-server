@@ -7,17 +7,17 @@ const config = {
     gop_cache: true,
     ping: 30,
     ping_timeout: 60,
-    ffmpeg: '/usr/bin/ffmpeg'  // Ensure this path is correct
+    ffmpeg: '/usr/bin/ffmpeg'
   },
   http: {
     port: 8000,
     allow_origin: '*',
-    mediaroot: './media',  // Ensure this directory exists or is created
-    webroot: './www',      // Ensure this directory exists or is created
+    mediaroot: './media',
+    webroot: './www',
     api: true
   },
   trans: {
-    ffmpeg: '/usr/bin/ffmpeg',  // Update this path to the correct location
+    ffmpeg: '/usr/bin/ffmpeg',
     tasks: [
       {
         app: 'live',
@@ -30,12 +30,31 @@ const config = {
         dash: true
       }
     ]
+  },
+  auth: {
+    api : true,
+    play: false,
+    publish: true,  // Enable stream key authentication for publishing
+    secret: 'bezaitis_experiment'  // You can set any string here for stream key validation
   }
 };
 
 var nms = new NodeMediaServer(config);
+
+nms.on('prePublish', (id, StreamPath, args) => {
+  let streamKey = getStreamKeyFromStreamPath(StreamPath);
+  console.log('[NodeEvent on prePublish]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
+
+  // Validate stream key
+  if (streamKey !== 'bezaitis_experiment') {  // Set your preferred stream key here
+    console.log('[NodeEvent on prePublish] Stream key is invalid');
+    nms.getSession(id).reject();
+  }
+});
+
+const getStreamKeyFromStreamPath = (path) => {
+  let parts = path.split('/');
+  return parts[parts.length - 1];
+};
+
 nms.run();
-
-console.log("RTMP server is running on port 80");
-console.log("HTTP server is running on port 8000");
-
