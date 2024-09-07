@@ -7,14 +7,14 @@ const config = {
     gop_cache: true,
     ping: 30,
     ping_timeout: 60,
-    ffmpeg: '/usr/bin/ffmpeg'
+    ffmpeg: '/usr/bin/ffmpeg'  // Update this path if necessary
   },
   http: {
-    port: 8000,
+    port: 80,  // Same port as RTMP
     allow_origin: '*',
     mediaroot: './media',
     webroot: './www',
-    api: true
+    api: false  // Disable HTTP API if not needed
   },
   trans: {
     ffmpeg: '/usr/bin/ffmpeg',
@@ -32,10 +32,10 @@ const config = {
     ]
   },
   auth: {
-    api : true,
+    api: false,  // Disable API authentication if not needed
     play: false,
-    publish: true,  // Enable stream key authentication for publishing
-    secret: 'bezaitis_experiment'  // You can set any string here for stream key validation
+    publish: true,
+    secret: 'bezaitis_experiment'  // Stream key
   }
 };
 
@@ -45,8 +45,7 @@ nms.on('prePublish', (id, StreamPath, args) => {
   let streamKey = getStreamKeyFromStreamPath(StreamPath);
   console.log('[NodeEvent on prePublish]', `id=${id} StreamPath=${StreamPath} args=${JSON.stringify(args)}`);
 
-  // Validate stream key
-  if (streamKey !== 'bezaitis_experiment') {  // Set your preferred stream key here
+  if (streamKey !== 'bezaitis_experiment') {
     console.log('[NodeEvent on prePublish] Stream key is invalid');
     nms.getSession(id).reject();
   }
@@ -58,3 +57,6 @@ const getStreamKeyFromStreamPath = (path) => {
 };
 
 nms.run();
+
+console.log("RTMP server is running on port 80");
+
